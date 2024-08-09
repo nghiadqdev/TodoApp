@@ -8,6 +8,9 @@ module.exports = {
 	transformIgnorePatterns: [
 		'node_modules/(?!(jest-)?react-native|@react-native|@react-native-community|@react-navigation|ky)',
 	],
+	moduleNameMapper: {
+		'^recoil$': '<rootDir>/node_modules/recoil/cjs/recoil.production.min.js',
+	  },
 	collectCoverageFrom: [
 		'<rootDir>/src/Components/**/*.jsx',
 		'<rootDir>/src/App.jsx',

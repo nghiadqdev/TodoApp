@@ -1,0 +1,6 @@
+{
+  "title": "Chào mừng vào",
+  "subtitle": "Là $t(common:appName.full)",
+  "description": "Bạn có muốn khám phá một số tính năng? Chỉ cần nhấp vào một trong ba nút ở cuối màn hình. Cái đầu tiên cho phép bạn gọi API REST. Thứ hai cho phép bạn thay đổi màu chủ đề. Và thứ ba cho phép bạn thay đổi ngôn ngữ.",
+  "welcome": "Chào mừng đến với TodoApp"
+}

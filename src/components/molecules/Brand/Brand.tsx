@@ -19,7 +19,6 @@ function Brand({ height = 200, width = 200, mode = 'contain' }: Props) {
 	if (!isImageSourcePropType(LogoLight) || !isImageSourcePropType(LogoDark)) {
 		throw new Error('Image source is not valid');
 	}
-
 	return (
 		<View testID="brand-img-wrapper" style={{ height, width }}>
 			<ImageVariant

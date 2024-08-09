@@ -17,8 +17,8 @@ Reactotron.configure({
 	onDisconnect: () => {
 		queryClientManager.unsubscribe();
 	},
-})
-	.useReactNative()
+}) 								// Cấu hình Reactotron
+	.useReactNative() 			// Sử dụng các plugin mặc định cho React Native
 	.use(mmkvPlugin<ReactotronReactNative>({ storage }))
 	.use(reactotronReactQuery(queryClientManager))
-	.connect();
+	.connect();							// Kết nối với Reactotron app
