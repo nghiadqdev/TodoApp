@@ -1,6 +1,10 @@
 import { Alert, Dimensions, PermissionsAndroid, Platform, StatusBar } from 'react-native';
 import { Colors } from './colors'
 import { Fonts } from './fonts'
+import { storage } from '@/App';
+import moment from 'moment';
+import { TaskType } from '@/recoils/atoms/todolistAtoms';
+import { LIST_TAG_TASK } from './constant'
 
 const isIOS = Platform.OS === 'ios';
 const { width, height } = Dimensions.get('window');
@@ -74,6 +78,82 @@ function shuffleArray(n: number) { // n is length of array
   }
   return array;
 }
+function calculateDaysBetween(dateString: Date) {
+  const oneDay = 24 * 60 * 60 * 1000; // Số mili giây trong một ngày
+  const givenDate = new Date(dateString).getTime();
+  const currentDate = new Date().getTime();
+
+  // Tính số ngày chênh lệch
+  const differenceInTime = currentDate - givenDate;
+  const differenceInDays = Math.round(differenceInTime / oneDay);
+
+  return differenceInDays;
+}
+
+function loadDate(): { [key in string]: TaskType[] } {
+  const target = new Date(); // Ngày target
+  let dates = {};
+  let num = 0
+  // Thêm 50 ngày trước ngày target
+  for (let i = 50; i > 0; i--) {
+    num++
+    // storage.set('user.name', 'Marc')
+    const date = new Date(target);
+    date.setDate(target.getDate() - i);
+    let task = storage.getString(moment(new Date(date)).format('YYYY-MM-DD'))
+    if (!task) {
+      dates = { ...dates, [moment(new Date(date)).format('YYYY-MM-DD')]: [{ name: "Empty", index: num, date }] };
+    } else {
+      dates = { ...dates, [moment(new Date(date)).format('YYYY-MM-DD')]: JSON.parse(task || "[]") };
+    }
+  }
+
+  // Thêm ngày target
+  let toDaytask = storage.getString(moment(new Date()).format('YYYY-MM-DD'))
+  if (!toDaytask) {
+    dates = { ...dates, [moment(new Date()).format('YYYY-MM-DD')]: [{ name: "Empty", index: num, date: new Date() }] };
+  } else {
+    dates = { ...dates, [moment(new Date()).format('YYYY-MM-DD')]: JSON.parse(toDaytask || "[]") };
+  }
+
+  // Thêm 50 ngày sau ngày target
+  for (let i = 1; i <= 50; i++) {
+    num++
+    const date = new Date(target);
+    date.setDate(target.getDate() + i);
+    let task = storage.getString(moment(new Date(date)).format('YYYY-MM-DD'))
+    if (!task) {
+      dates = { ...dates, [moment(new Date(date)).format('YYYY-MM-DD')]: [{ name: "Empty", index: num, date }] };
+    } else {
+      dates = { ...dates, [moment(new Date(date)).format('YYYY-MM-DD')]: JSON.parse(task || "[]") };
+    }
+  }
+
+  return dates;
+}
+
+function addTask(date: Date, task: TaskType) {
+  let checkTask = JSON.parse(storage.getString(moment(new Date(date)).format('YYYY-MM-DD')) || '[]')
+  let param = {
+    ...task,
+    date,
+    index: 50
+  }
+  if (checkTask?.length <= 1 && checkTask[0]?.name == "Empty") {
+    storage.set(moment(new Date(date)).format('YYYY-MM-DD'), JSON.stringify([param]))
+    return [param]
+  } else {
+    let param = {
+      ...task,
+      date,
+      index: 50
+    }
+    checkTask = [...checkTask, param].sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
+    storage.set(moment(new Date(date)).format('YYYY-MM-DD'), JSON.stringify(checkTask))
+    return checkTask
+  }
+
+}
 
 export {
   width as fullWidth,
@@ -90,4 +170,7 @@ export {
   scaleWidth,
   convertSecond,
   shuffleArray,
+  loadDate,
+  LIST_TAG_TASK,
+  addTask
 };

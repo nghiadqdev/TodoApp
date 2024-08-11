@@ -1,4 +1,4 @@
-import { ColorValue, ViewStyle } from "react-native";
+import { ColorValue, TextStyle, ViewStyle } from "react-native";
 
 export interface ATextType {
     /**
@@ -125,5 +125,5 @@ export interface ATextType {
     * view style
     * @default false
    */
-    aStyle?: ViewStyle | ViewStyle[]
+    aStyle?: TextStyle | TextStyle[]
 }

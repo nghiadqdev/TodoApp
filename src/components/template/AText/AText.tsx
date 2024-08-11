@@ -6,7 +6,7 @@ import { todoList_atom, user_atom } from '@/recoils';
 import { Colors, Fonts, isIOS, normalize } from '@/common';
 
 const AText: FC<ATextType & TextProps> = props => {
-    const { style, children, title = false, h12 = true, h10=false, h14 = false, h16 = false, h18 = false, h20 = false, h22 = false, h24 = false, h26 = false, h28 = false, h11, h30,
+    const { aStyle, children, title = false, h12 = true, h10=false, h14 = false, h16 = false, h18 = false, h20 = false, h22 = false, h24 = false, h26 = false, h28 = false, h11, h30,
         font_Heavy = false, font_Bold = false, center = false, numOfLines, color = Colors.black333, w400, w500, w600, w700, w900, lineH, ...rest
     } = props;
     const [user, setUser] = useRecoilState(user_atom)
@@ -38,7 +38,7 @@ const AText: FC<ATextType & TextProps> = props => {
                 { color, fontFamily: Fonts.fontPoppins_Medium },
                 font_Heavy && { fontFamily: Fonts.fontPoppins_Thin },
                 font_Bold && { fontFamily: Fonts.fontPoppins_Bold },
-                style,
+                aStyle,
             ]}>
             {children}
         </Text>

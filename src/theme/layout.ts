@@ -1,3 +1,4 @@
+import { Colors } from '@/common';
 import { ViewStyle } from 'react-native';
 
 export default {
@@ -42,6 +43,13 @@ export default {
 	},
 	justifyStart: {
 		justifyContent: 'flex-start',
+	},
+	shadow: {
+		shadowColor: Colors.black,
+		shadowOffset: { width: 1, height: 1 },
+		shadowRadius: 5,
+		shadowOpacity: 0.35,
+		elevation: 4,
 	},
 	/* Sizes Layouts */
 	flex_1: {

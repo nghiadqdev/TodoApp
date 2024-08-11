@@ -6,15 +6,18 @@ import { Example, Startup } from '@/screens';
 import { useTheme } from '@/theme';
 
 import type { RootStackParamList } from '@/types/navigation';
+import useAddTask from '@/common/hook';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 function ApplicationNavigator() {
-	const { variant, navigationTheme } = useTheme();
+	const { variant, navigationTheme, layout } = useTheme();
+	const modalTask = useAddTask()
 
 	return (
 		<SafeAreaProvider>
 			<NavigationContainer theme={navigationTheme}>
+				{modalTask()}
 				<Stack.Navigator key={variant} screenOptions={{ headerShown: false }}>
 					<Stack.Screen name="Startup" component={Startup} />
 					<Stack.Screen name="Example" component={Example} />

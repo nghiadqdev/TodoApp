@@ -1,7 +1,15 @@
-import { atom } from 'recoil';
+import { LIST_TAG_TASK } from '@/common';
+import { atom, RecoilState } from 'recoil';
 
+export type TaskType = {
+  name: string;
+  date: Date,
+  time?: Date,
+  tag?: keyof typeof LIST_TAG_TASK,
+  index: number
+};
 // Atom quản lý danh sách các todo
-export const todoList_atom = atom({
+export const todoList_atom: RecoilState<{[key in string]: TaskType[]}> = atom({
   key: 'todoListState',
-  default: [], // Danh sách ban đầu trống
+  default: {}, // Danh sách ban đầu trống
 });

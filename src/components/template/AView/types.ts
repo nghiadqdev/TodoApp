@@ -1,4 +1,7 @@
+import { ReactNode } from "react";
 import { ColorValue, ViewStyle } from "react-native";
+import { BaseAnimationBuilder, EntryExitAnimationFunction } from "react-native-reanimated";
+import { ReanimatedKeyframe } from "react-native-reanimated/lib/typescript/reanimated2/layoutReanimation/animationBuilder/Keyframe";
 
 export interface AViewType {
     /**
@@ -70,10 +73,26 @@ export interface AViewType {
     * flexdirection row
     * @default false
    */
-    r?: number
+    r?: boolean
     /**
     * view style
     * @default false
    */
     aStyle?: ViewStyle | ViewStyle[]
+}
+
+export interface AModalType {
+    /**
+     * when true modal is opening
+     * @default false
+    */
+    isOpent: boolean,
+    animationTypeIn?: BaseAnimationBuilder | typeof BaseAnimationBuilder | EntryExitAnimationFunction | ReanimatedKeyframe,
+    animationTypeOut?: BaseAnimationBuilder | typeof BaseAnimationBuilder | EntryExitAnimationFunction | ReanimatedKeyframe,
+    children: ReactNode | ReactNode[],
+    /**
+     * action on close modal
+     * @default false
+    */
+    onClose: () => void,
 }

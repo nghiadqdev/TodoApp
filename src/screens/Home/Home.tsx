@@ -13,7 +13,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { ImageVariant } from '@/components/atoms';
 import { Brand } from '@/components/molecules';
-import { AText, SafeScreen } from '@/components/template';
+import { AText, SafeScreen, Timeline } from '@/components/template';
 import { useTheme } from '@/theme';
 import { fetchOne } from '@/services/users';
 
@@ -22,6 +22,12 @@ import { isImageSourcePropType } from '@/types/guards/image';
 import SendImage from '@/theme/assets/images/send.png';
 import ColorsWatchImage from '@/theme/assets/images/colorswatch.png';
 import TranslateImage from '@/theme/assets/images/translate.png';
+import Wrapper from '@/components/template/SafeScreen/Wraper';
+import { storage } from '@/App';
+import moment from 'moment';
+import { loadDate } from '@/common';
+import { useRecoilState,  } from 'recoil';
+import { todoList_atom } from '@/recoils';
 
 function Home() {
 	const { t } = useTranslation(['example', 'welcome']);
@@ -36,6 +42,7 @@ function Home() {
 		backgrounds,
 	} = useTheme();
 	const [currentId, setCurrentId] = useState(-1);
+	const [todoListAtom, setTodoListAtom] = useRecoilState(todoList_atom)
 
 	// EFFECT
 	const { isSuccess, data, isFetching } = useQuery({
@@ -50,6 +57,10 @@ function Home() {
 			Alert.alert(t('example:helloUser', { name: data.name }));
 		}
 	}, [isSuccess, data]);
+	useEffect(() => {
+	    let listTask = loadDate()
+		setTodoListAtom(listTask)
+	}, []);
 
 	// ACTION
 	const onChangeTheme = () => {
@@ -69,10 +80,11 @@ function Home() {
 	}
 
 	return (
-		<SafeScreen>
-			<View style={[gutters.paddingHorizontal_32, gutters.marginTop_40]}>
-				<View style={[gutters.marginTop_40]}>
+		<Wrapper>
+			<View style={[gutters.marginTop_40, {flex: 1}]}>
+				<View style={[gutters.marginTop_40, {flex: 1}]}>
 					<AText h12 center>{t('welcome:welcome')}</AText>
+					<Timeline />
 				</View>
 				<View
 					style={[
@@ -122,7 +134,7 @@ function Home() {
 					</TouchableOpacity>
 				</View>
 			</View>
-		</SafeScreen>
+		</Wrapper>
 	);
 }
 
