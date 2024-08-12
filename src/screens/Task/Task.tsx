@@ -26,10 +26,10 @@ import Wrapper from '@/components/template/SafeScreen/Wraper';
 import { storage } from '@/App';
 import moment from 'moment';
 import { loadDate } from '@/common';
-import { useRecoilState,  } from 'recoil';
+import { useRecoilState, } from 'recoil';
 import { todoList_atom } from '@/recoils';
 
-function Home() {
+function Task() {
 	const { t } = useTranslation(['example', 'welcome']);
 	const {
 		colors,
@@ -58,7 +58,7 @@ function Home() {
 		}
 	}, [isSuccess, data]);
 	useEffect(() => {
-	    let listTask = loadDate()
+		let listTask = loadDate()
 		setTodoListAtom(listTask)
 	}, []);
 
@@ -81,61 +81,56 @@ function Home() {
 
 	return (
 		<Wrapper>
-			<View style={[gutters.marginTop_40, {flex: 1}]}>
-				<View style={[gutters.marginTop_40, {flex: 1}]}>
-					<AText h12 center>{t('welcome:welcome')}</AText>
-					<Timeline />
-				</View>
-				<View
-					style={[
-						layout.row,
-						layout.justifyBetween,
-						layout.fullWidth,
-						gutters.marginTop_16,
-					]}
+			<Timeline />
+			{/* <View
+				style={[
+					layout.row,
+					layout.justifyBetween,
+					layout.fullWidth,
+					gutters.marginTop_16,
+				]}
+			>
+				<TouchableOpacity
+					testID="fetch-user-button"
+					style={[components.buttonCircle, gutters.marginBottom_16]}
+					onPress={() => setCurrentId(Math.ceil(Math.random() * 10 + 1))}
 				>
-					<TouchableOpacity
-						testID="fetch-user-button"
-						style={[components.buttonCircle, gutters.marginBottom_16]}
-						onPress={() => setCurrentId(Math.ceil(Math.random() * 10 + 1))}
-					>
-						{isFetching ? (
-							<ActivityIndicator />
-						) : (
-							<ImageVariant
-								source={SendImage}
-								style={{ tintColor: colors.purple500 }}
-							/>
-						)}
-					</TouchableOpacity>
-
-					<TouchableOpacity
-						testID="change-theme-button"
-						style={[components.buttonCircle, gutters.marginBottom_16]}
-						onPress={() => onChangeTheme()}
-					>
+					{isFetching ? (
+						<ActivityIndicator />
+					) : (
 						<ImageVariant
-							source={ColorsWatchImage}
+							source={SendImage}
 							style={{ tintColor: colors.purple500 }}
 						/>
-					</TouchableOpacity>
+					)}
+				</TouchableOpacity>
 
-					<TouchableOpacity
-						testID="change-language-button"
-						style={[components.buttonCircle, gutters.marginBottom_16]}
-						onPress={() =>
-							onChangeLanguage(i18next.language === 'vi' ? 'en' : 'vi')
-						}
-					>
-						<ImageVariant
-							source={TranslateImage}
-							style={{ tintColor: colors.purple500 }}
-						/>
-					</TouchableOpacity>
-				</View>
-			</View>
+				<TouchableOpacity
+					testID="change-theme-button"
+					style={[components.buttonCircle, gutters.marginBottom_16]}
+					onPress={() => onChangeTheme()}
+				>
+					<ImageVariant
+						source={ColorsWatchImage}
+						style={{ tintColor: colors.purple500 }}
+					/>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					testID="change-language-button"
+					style={[components.buttonCircle, gutters.marginBottom_16]}
+					onPress={() =>
+						onChangeLanguage(i18next.language === 'vi' ? 'en' : 'vi')
+					}
+				>
+					<ImageVariant
+						source={TranslateImage}
+						style={{ tintColor: colors.purple500 }}
+					/>
+				</TouchableOpacity>
+			</View> */}
 		</Wrapper>
 	);
 }
 
-export default Home;
+export default Task;

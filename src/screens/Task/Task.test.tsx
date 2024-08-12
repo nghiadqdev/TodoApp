@@ -7,7 +7,7 @@ import { ThemeProvider } from '@/theme';
 import i18n from '@/translations';
 
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Home from './Home';
+import Home from './Task';
 
 describe('Example screen should render correctly', () => {
 	let storage: MMKV;

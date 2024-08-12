@@ -6,7 +6,9 @@ export type TaskType = {
   date: Date,
   time?: Date,
   tag?: keyof typeof LIST_TAG_TASK,
-  index: number
+  index: number,
+  description?: string,
+  isSecurity?: boolean
 };
 // Atom quản lý danh sách các todo
 export const todoList_atom: RecoilState<{[key in string]: TaskType[]}> = atom({

@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { StyleSheet, Text, TextStyle, TextProps } from 'react-native';
 import { useRecoilState } from 'recoil';
 import { ATextType } from './types';
 import { todoList_atom, user_atom } from '@/recoils';
 import { Colors, Fonts, isIOS, normalize } from '@/common';
 
-const AText: FC<ATextType & TextProps> = props => {
+const AText: FC<ATextType & TextProps> = (props) : JSX.Element => {
     const { aStyle, children, title = false, h12 = true, h10=false, h14 = false, h16 = false, h18 = false, h20 = false, h22 = false, h24 = false, h26 = false, h28 = false, h11, h30,
         font_Heavy = false, font_Bold = false, center = false, numOfLines, color = Colors.black333, w400, w500, w600, w700, w900, lineH, ...rest
     } = props;

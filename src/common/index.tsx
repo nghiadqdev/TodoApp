@@ -4,7 +4,7 @@ import { Fonts } from './fonts'
 import { storage } from '@/App';
 import moment from 'moment';
 import { TaskType } from '@/recoils/atoms/todolistAtoms';
-import { LIST_TAG_TASK } from './constant'
+import { LIST_TAG_TASK, Routes } from './constant'
 
 const isIOS = Platform.OS === 'ios';
 const { width, height } = Dimensions.get('window');
@@ -137,7 +137,6 @@ function addTask(date: Date, task: TaskType) {
   let param = {
     ...task,
     date,
-    index: 50
   }
   if (checkTask?.length <= 1 && checkTask[0]?.name == "Empty") {
     storage.set(moment(new Date(date)).format('YYYY-MM-DD'), JSON.stringify([param]))
@@ -146,7 +145,6 @@ function addTask(date: Date, task: TaskType) {
     let param = {
       ...task,
       date,
-      index: 50
     }
     checkTask = [...checkTask, param].sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
     storage.set(moment(new Date(date)).format('YYYY-MM-DD'), JSON.stringify(checkTask))
@@ -172,5 +170,6 @@ export {
   shuffleArray,
   loadDate,
   LIST_TAG_TASK,
-  addTask
+  addTask,
+  Routes
 };
