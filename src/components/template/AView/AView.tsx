@@ -20,8 +20,8 @@ const AView = (props: React.JSX.IntrinsicAttributes & React.JSX.IntrinsicClassAt
                 f1 && { flex: 1 },
                 f2 && { flex: 2 },
                 !!w && { width: scaleWidth(w) },
-                !!h && { height: scaleHeight(h) },
-                r && { flexDirection: 'row' },
+                !!h && { height: h == 'auto' ? 'auto' : scaleHeight(h) },
+                r && { flexDirection: 'row', alignItems: 'center' },
                 center && { justifyContent: 'center', alignItems: 'center' },
                 !!p && { padding: normalize(p) },
                 !!ph && { paddingHorizontal: normalize(ph) },
@@ -30,7 +30,7 @@ const AView = (props: React.JSX.IntrinsicAttributes & React.JSX.IntrinsicClassAt
                 !!pr && { paddingRight: normalize(pr) },
                 !!pb && { paddingBottom: normalize(pb) },
                 !!pt && { paddingTop: normalize(pt) },
-                { ...aStyle }
+                aStyle
             ]}
             testID={testID}
             accessibilityLabel={testID}

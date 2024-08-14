@@ -28,7 +28,7 @@ export interface AViewType {
     * height of view
     * @default false
    */
-    h?: number,
+    h?: number | 'auto',
     /**
     * background value
     * @default transparent

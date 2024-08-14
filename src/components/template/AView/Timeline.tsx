@@ -34,9 +34,9 @@ const Timeline = () => {
             let label = LIST_TAG_TASK[item.tag || 'Low']
             let bg = index % 2 == 0 ? Colors.timf3eefb : Colors.white
             return (
-                <AView bg={bg} aStyle={firstItemInDay ? styles.itemCalendarStyle : {}}>
+                <AView bg={bg} h={firstItemInDay ? 80 : 50} aStyle={firstItemInDay ? styles.itemCalendarStyle : {}}>
                     {firstItemInDay &&
-                        <AView h={40} r center bg={bg}>
+                        <AView h={30} r center bg={bg}>
                             <AText h14 color={Colors.tim8c50ea}>{'Add orther task'}</AText>
                             <AIcon
                                 onPress={() => setUser({ ...user, isAddTask: moment(new Date(item.date)).format('YYYY-MM-DD') })}
@@ -46,13 +46,19 @@ const Timeline = () => {
                                 size={20} />
                         </AView>
                     }
-                    <AView r h={40} bg={color} aStyle={{ alignItems: 'center' }}>
-                        {!firstItemInDay && <AView w={60} bg={bg} center><AView w={1} h={40} center bg={Colors.tim8c50ea}><DotPoin /></AView></AView>}
-                        <AText h14 aStyle={{ marginLeft: scaleWidth(12) }}>{moment(item?.time).format('hh:mm')}</AText>
-                        <AView p={6} ph={12} bg={label.color} aStyle={{ borderRadius: normalize(10), marginHorizontal: normalize(10) }}>
-                            <AText h12 color='white'>{label.title}</AText>
+                    <AView r h={50} bg={color} aStyle={{ alignItems: 'center' }}>
+                        {!firstItemInDay && <AView w={60} bg={bg} center><AView w={1} h={50} center bg={Colors.tim8c50ea}><DotPoin /></AView></AView>}
+                        <AView r f1>
+                            <AView p={6}>
+                                <AView r >
+                                    <AText h12>{moment(item?.time).format('hh:mm')}</AText>
+                                    <AView p={2} ph={12} bg={label.color} aStyle={styles.labelStyle}>
+                                        <AText h12 color='white'>{label.title}</AText>
+                                    </AView>
+                                </AView>
+                                <AText h16 w500>{item.name}</AText>
+                            </AView>
                         </AView>
-                        <AText h14>{item.name}{index}</AText>
                     </AView>
                 </AView>
             )
@@ -119,11 +125,9 @@ const styles = StyleSheet.create({
     itemCalendarStyle: {
         borderTopColor: Colors.tim7543d2,
         borderTopWidth: normalize(1),
-        // shadowColor: Colors.tim8c50ea,
-        // shadowOffset: { width: 0, height: 1 },
-        // shadowRadius: 5,
-        // shadowOpacity: 0.35,
-        // elevation: 4,
+    },
+    labelStyle: {
+        borderRadius: normalize(10), marginHorizontal: normalize(10), marginLeft: normalize(8)
     }
 });
 

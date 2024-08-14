@@ -1,4 +1,4 @@
-import { AView, ABackground, ATouch, Timeline, AModal } from './AView';
+import { AView, ABackground, ATouch, Timeline, AModal, AFlastlist } from './AView';
 import AText from './AText'
 import AIcon from './AIcon'
 import AInput from './AInput'
@@ -11,5 +11,6 @@ export {
     AText, Timeline,
     AIcon,
     AModal,
-    AInput
+    AInput,
+    AFlastlist
 }

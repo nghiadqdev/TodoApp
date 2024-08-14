@@ -150,7 +150,19 @@ function addTask(date: Date, task: TaskType) {
     storage.set(moment(new Date(date)).format('YYYY-MM-DD'), JSON.stringify(checkTask))
     return checkTask
   }
-
+}
+function editTask(oldTask: TaskType, task: TaskType) {
+  let checkTask = JSON.parse(storage.getString(moment(new Date(task.date)).format('YYYY-MM-DD')) || '[]')
+  checkTask = checkTask.filter((val: { name: string; }) => val.name != oldTask.name)
+  checkTask = [...checkTask, task].sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
+  storage.set(moment(new Date(task.date)).format('YYYY-MM-DD'), JSON.stringify(checkTask))
+  return checkTask
+}
+function deleteTask(task: TaskType) {
+  let checkTask = JSON.parse(storage.getString(moment(new Date(task.date)).format('YYYY-MM-DD')) || '[]')
+  checkTask = checkTask.filter((val: { name: string; }) => val.name != task.name)
+  storage.set(moment(new Date(task.date)).format('YYYY-MM-DD'), JSON.stringify(checkTask))
+  return checkTask
 }
 
 export {
@@ -171,5 +183,7 @@ export {
   loadDate,
   LIST_TAG_TASK,
   addTask,
-  Routes
+  Routes,
+  editTask,
+  deleteTask
 };

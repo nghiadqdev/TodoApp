@@ -1,10 +1,12 @@
 import { RecoilState, atom } from "recoil";
+import { TaskType } from "./todolistAtoms";
 
 type UserType = {
     name: string;
     gender: string,
     sizeText: number,
     isAddTask: string,
+    isEditTask: TaskType | any,
 };
 export const user_atom: RecoilState<UserType> = atom({
     key: 'user_atom',
@@ -12,6 +14,7 @@ export const user_atom: RecoilState<UserType> = atom({
         name: '',
         gender: 'Male',
         sizeText: 1,
-        isAddTask: ''
+        isAddTask: '',
+        isEditTask: null
     },
 });

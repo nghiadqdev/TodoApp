@@ -2,7 +2,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { AModal, ATouch, AView } from './AView'
 import AInput from './AInput'
-import { addTask, Colors, fullWidth, LIST_TAG_TASK, normalize, scaleHeight, scaleWidth } from '@/common'
+import { addTask, Colors, editTask, fullWidth, LIST_TAG_TASK, normalize, scaleHeight, scaleWidth } from '@/common'
 import AText from './AText'
 import moment from 'moment'
 import { useRecoilState } from 'recoil'
@@ -24,11 +24,19 @@ const modalAddTask = () => {
     useEffect(() => {
         setDisable(taskTitle == '')
     }, [taskTitle]);
+    useEffect(() => {
+        if (!!user.isEditTask) {
+            let task = user.isEditTask
+            settaskTitle(task.name)
+            settimePicker(task.time)
+            settagSelect(task.tag)
+        }
+    }, [JSON.stringify(user.isEditTask)]);
 
     const handleSaveTask = () => {
         setDisable(true)
         setloadding(true)
-        let item = todoListAtom[user.isAddTask]
+        let item = todoListAtom[user.isAddTask] // list task today
         let task = {
             name: taskTitle,
             time: timePicker,
@@ -36,11 +44,16 @@ const modalAddTask = () => {
             date: new Date(user.isAddTask),
             index: item[0].index
         }
-        let newTask = addTask(new Date(user.isAddTask), task)
-        setTodoListAtom({...todoListAtom, [user.isAddTask]: newTask})
+        let newTask
+        if (!!user.isEditTask) {
+            newTask = editTask(user.isEditTask, task)
+
+        } else
+            newTask = addTask(new Date(user.isAddTask), task)
+        setTodoListAtom({ ...todoListAtom, [user.isAddTask]: newTask })
         setDisable(false)
         setloadding(false)
-        setUser({ ...user, isAddTask: '' })
+        setUser({ ...user, isAddTask: '', isEditTask: null })
     }
 
     const renderTimePicker = useCallback(() => {
@@ -99,7 +112,7 @@ const modalAddTask = () => {
                     </AView>
                 </AView>
                 <ATouch disabled={isDisable} onPress={handleSaveTask} style={styles.btnSave}>
-                   {loadding ? <ActivityIndicator color={Colors.tim8c50ea} size={'large'} /> : <AText h12 color='white'>{'Save'}</AText>}
+                    {loadding ? <ActivityIndicator color={Colors.tim8c50ea} size={'large'} /> : <AText h12 color='white'>{'Save'}</AText>}
                 </ATouch>
                 {renderTimePicker()}
             </AView>

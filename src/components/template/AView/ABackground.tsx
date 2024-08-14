@@ -19,7 +19,7 @@ const ATouch = (props: ImageBackgroundProps & AViewType) => {
                 f1 && { flex: 1 },
                 f2 && { flex: 2 },
                 !!w && { width: scaleWidth(w) },
-                !!h && { width: scaleHeight(h) },
+                !!h && { width: h == 'auto' ? 'auto' : scaleHeight(h) },
                 !!r && { flexDirection: 'row' },
                 center && { justifyContent: 'center', alignItems: 'center' },
                 !!p && { padding: normalize(p) },
@@ -29,7 +29,7 @@ const ATouch = (props: ImageBackgroundProps & AViewType) => {
                 !!pr && { paddingRight: normalize(pr) },
                 !!pb && { paddingBottom: normalize(pb) },
                 !!pt && { paddingTop: normalize(pt) },
-                { ...aStyle }
+                aStyle
             ]}
             testID={testID}
             accessibilityLabel={testID}
