@@ -43,19 +43,19 @@ const AppFooter = (props: AppFooterType) => {
         let origin = ''
         switch (index) {
             case 0:
-                IMAGE = 'home';
+                IMAGE = isFocused ? 'clipboard-list-outline' : 'clipboard-list';
                 TAB_NAME = 'Dashboard'
-                origin = isFocused ? ICON_TYPE.ICONICONS : ICON_TYPE.ANT_ICON
+                origin = ICON_TYPE.MATERIAL_COMMUNITY
                 break;
             case 1:
-                IMAGE = !isFocused ? 'setting' : 'settings';
+                IMAGE = !isFocused ? 'calendar' : 'calendar-outline';
                 TAB_NAME = 'Task'
-                origin = !isFocused ? ICON_TYPE.ANT_ICON : ICON_TYPE.ICONICONS
+                origin = ICON_TYPE.MATERIAL_COMMUNITY
                 break;
             default:
-                IMAGE = 'home';
+                IMAGE = isFocused ? 'clipboard-list-outline' : 'clipboard-list';
                 TAB_NAME = 'Dashboard'
-                origin = isFocused ? ICON_TYPE.ICONICONS : ICON_TYPE.ANT_ICON
+                origin = ICON_TYPE.MATERIAL_COMMUNITY
                 break;
         }
         return (

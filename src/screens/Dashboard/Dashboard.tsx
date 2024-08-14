@@ -159,15 +159,15 @@ function Dashboard({ navigation }: RootScreenProps<'Dashboard'>) {
 					<AView>
 						<AView r aStyle={{ justifyContent: 'space-between', marginBottom: normalize(5) }}>
 							<AIcon
-								name='edit-square'
-								origin={ICON_TYPE.MATERIAL_ICONS}
-								size={normalize(22)}
+								name='edit'
+								origin={ICON_TYPE.ANT_ICON}
+								size={normalize(30)}
 								onPress={() => handleEditTask(item)}
 							/>
 							<AIcon
 								name='close-box-outline'
 								origin={ICON_TYPE.MATERIAL_COMMUNITY}
-								size={normalize(22)}
+								size={normalize(30)}
 								onPress={() => handleDeleteTask(item)}
 							/>
 						</AView>
