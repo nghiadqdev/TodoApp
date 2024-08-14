@@ -12,10 +12,10 @@ import { todoList_atom, user_atom } from '@/recoils';
 import { TaskType } from '@/recoils/atoms/todolistAtoms';
 import AIcon from '../AIcon';
 import { ICON_TYPE } from '../AIcon/AIcon';
+import modalAddTask from '../modalAddTask';
 
 const Timeline = () => {
     const [todoListAtom, setTodoListAtom] = useRecoilState(todoList_atom)
-    const [selected, setSelected] = useState('');
     const [user, setUser] = useRecoilState(user_atom)
 
     // RENDER
@@ -51,7 +51,7 @@ const Timeline = () => {
                         <AView r f1>
                             <AView p={6}>
                                 <AView r >
-                                    <AText h12>{moment(item?.time).format('hh:mm')}</AText>
+                                    <AText h12>{moment(item?.timeStart).format('hh:mm a')} - {moment(item?.timeEnd).format('hh:mm a')}</AText>
                                     <AView p={2} ph={12} bg={label.color} aStyle={styles.labelStyle}>
                                         <AText h12 color='white'>{label.title}</AText>
                                     </AView>
@@ -73,9 +73,6 @@ const Timeline = () => {
             </AView>
             <Agenda
                 items={todoListAtom}
-                onDayPress={(day: { dateString: React.SetStateAction<string>; }) => {
-                    setSelected(day.dateString);
-                }}
                 renderItem={renderItemTask}
                 renderDay={(day: any, item: any) => {
                     let index = item.index
@@ -86,7 +83,7 @@ const Timeline = () => {
                         return (
                             <AView w={60} h={80} bg={color} aStyle={{ borderTopWidth: 1, borderTopColor: Colors.tim7543d2 }}>
                                 <AView f1 center>
-                                    <AText h16 color={Colors.tim8c50ea}>{moment(new Date(day)).format('DD')}</AText>
+                                    <AText h18 color={Colors.tim8c50ea}>{moment(new Date(day)).format('DD')}</AText>
                                     <AText h12 color={Colors.tim8c50ea}>{moment(day).format('ddd')}</AText>
                                 </AView>
                                 {checkTask && <AView bg={color} aStyle={{ alignItems: 'center' }}>
@@ -104,6 +101,7 @@ const Timeline = () => {
                     )
                 }}
             />
+            {modalAddTask()}
         </View>
     );
 };

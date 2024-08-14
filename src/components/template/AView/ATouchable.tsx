@@ -1,4 +1,4 @@
-import { ColorValue, NativeMethods, StyleSheet, Text, TouchableMixin, TouchableOpacity, TouchableOpacityComponent, TouchableOpacityProps, View, ViewProps } from 'react-native'
+import { ColorValue, LayoutAnimation, NativeMethods, StyleSheet, Text, TouchableMixin, TouchableOpacity, TouchableOpacityComponent, TouchableOpacityProps, View, ViewProps } from 'react-native'
 import React from 'react'
 import { AViewType } from './Types'
 import { normalize, scaleHeight, scaleWidth } from '@/common'
@@ -14,6 +14,20 @@ const ATouch = (props: TouchableOpacityProps & AViewType) => {
         p, ph, pv, pl, pr, pb, pt, aStyle
     } = props
 
+	const toggleAnimation = (duration: number) => {
+		return {
+			duration: duration,
+			update: {
+				property: LayoutAnimation.Properties.scaleXY,
+				type: LayoutAnimation.Types.easeInEaseOut,
+			},
+			delete: {
+				property: LayoutAnimation.Properties.opacity,
+				type: LayoutAnimation.Types.easeInEaseOut,
+			},
+		};
+	};
+	LayoutAnimation.configureNext(toggleAnimation(300))
     return (
         <TouchableOpacity
             style={[

@@ -4,6 +4,7 @@ export const Colors = {
     tim7543d2: '#7543d2',
     timf3eefb: '#f3eefb',
     tim8c50ea: '#8c50ea',
+    success: '#7bc844',
 
     black: '#000000',
     white: '#FFFFFF',

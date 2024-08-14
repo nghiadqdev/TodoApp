@@ -2,18 +2,14 @@ import { createStackNavigator, StackCardInterpolationProps } from '@react-naviga
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { Dashboard, Task } from '@/screens';
 import { useTheme } from '@/theme';
 
-import type { RootStackParamList } from '@/types/navigation';
-import useAddTask from '@/common/hook';
 import AppTap from './AppTap';
 
 const Stack = createStackNavigator();
 
 function ApplicationNavigator() {
 	const { variant, navigationTheme, layout } = useTheme();
-	const modalTask = useAddTask()
 
 	const forFade = ({ current }: StackCardInterpolationProps) => ({
         cardStyle: {
@@ -23,7 +19,6 @@ function ApplicationNavigator() {
 	return (
 		<SafeAreaProvider>
 			<NavigationContainer theme={navigationTheme}>
-				{modalTask()}
 				<Stack.Navigator key={variant} screenOptions={{ headerShown: false }}>
 					<Stack.Screen
 						name="MainApp"

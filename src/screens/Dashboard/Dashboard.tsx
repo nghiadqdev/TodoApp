@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Animated, LayoutAnimation, StyleSheet, Text, View } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
@@ -16,13 +16,14 @@ import { todoList_atom, user_atom } from '@/recoils';
 import { Colors, deleteTask, fullWidth, LIST_TAG_TASK, normalize } from '@/common';
 import { TaskType } from '@/recoils/atoms/todolistAtoms';
 import { ICON_TYPE } from '@/components/template/AIcon/AIcon';
+import modalAddTask from '@/components/template/modalAddTask';
 
 function Dashboard({ navigation }: RootScreenProps<'Dashboard'>) {
 	const { layout, gutters, fonts } = useTheme();
 	const { t } = useTranslation(['startup']);
 	let dayKey = moment(new Date()).format('YYYY-MM-DD')
 	const [todoListAtom, setTodoListAtom] = useRecoilState(todoList_atom)
-	const [totalTask, settotalTask] = useState(0);
+	const [percentTask, setpercentTask] = useState(0);
 	const [fofularTask, setfofularTask] = useState(null);
 	const [listTask, setlistTask] = useState<any[]>([]);
 	const [listShowItem, setlistShowItem] = useState<any>({});
@@ -49,8 +50,13 @@ function Dashboard({ navigation }: RootScreenProps<'Dashboard'>) {
 	const loadChart = () => {
 		let list = todoListAtom[dayKey]
 		let db = new Map()
-		let listChart: any[] = [] // item 0 is low, 1 is medium, 2 is hight,...
+		let listChart: any[] = []
+		let total = 0
+		let totalDone = 0
+		let max = 0
 		list.forEach(element => {
+			if (element.isDone)
+				totalDone++
 			switch (element.tag) {
 				case 'Low':
 					db.set('Low', { value: (db.get('Low')?.value || 0) + 1, color: LIST_TAG_TASK.Low.color, })
@@ -68,17 +74,15 @@ function Dashboard({ navigation }: RootScreenProps<'Dashboard'>) {
 					break;
 			}
 		})
-		let total = 0
-		let max = 0
 		db.forEach((value, key) => {
 			if (value) {
 				listChart.push({ ...value, status: key })
 				total += value.value
 				max = Math.max(max, value.value)
 			}
-			console.log(list, '---list===========listChart----', listChart)
+			// console.log(list, '---list===========listChart----', listChart)
 		})
-		settotalTask(total)
+		setpercentTask(Math.round(((totalDone * 100)/total) * 100) / 100)
 		// setfofularTask(max)
 		setlistTask(listChart)
 	}
@@ -90,22 +94,16 @@ function Dashboard({ navigation }: RootScreenProps<'Dashboard'>) {
 		setUser({ ...user, isAddTask: moment(new Date(item.date)).format('YYYY-MM-DD'), isEditTask: item })
 	}
 	const handleDeleteTask = (item: TaskType) => {
-		deleteTask(item)
+		let newTask = deleteTask(item)
+		setTodoListAtom({ ...todoListAtom, [moment(new Date(newTask[0].date)).format('YYYY-MM-DD')]: newTask })
 	}
-	const toggleAnimation = (duration: number) => {
-		return {
-			duration: duration,
-			update: {
-				property: LayoutAnimation.Properties.scaleXY,
-				type: LayoutAnimation.Types.easeInEaseOut,
-			},
-			delete: {
-				property: LayoutAnimation.Properties.opacity,
-				type: LayoutAnimation.Types.easeInEaseOut,
-			},
-		};
-	};
-	LayoutAnimation.configureNext(toggleAnimation(300))
+	const handleDoneTask = (item: TaskType) => {
+		let listTaskToday = todoListAtom[moment(new Date(item.date)).format('YYYY-MM-DD')]
+		listTaskToday = listTaskToday.filter(i => i.name != item.name)
+		let newList = [...listTaskToday, { ...item, isDone: true }]
+		storage.set(moment(new Date(item.date)).format('YYYY-MM-DD'), JSON.stringify(newList))
+		setTodoListAtom({ ...todoListAtom, [moment(new Date(item.date)).format('YYYY-MM-DD')]: newList })
+	}
 	// RENDER
 	const renderChart = () => {
 		if (listTask.length < 2) {
@@ -131,53 +129,59 @@ function Dashboard({ navigation }: RootScreenProps<'Dashboard'>) {
 					sectionAutoFocus
 					radius={normalize(90)}
 					innerRadius={normalize(60)}
-					centerLabelComponent={() => <AView p={40}><AText h16>{'100% task complete'}</AText></AView>}
+					centerLabelComponent={() => <AView p={40}><AText h16>{`${percentTask}% task complete`}</AText></AView>}
 				/>
 			</AView>
 		)
 	}
-	const renderItem = (props: { item: TaskType; index: number; }) => {
+	const renderItem = useCallback((props: { item: TaskType; index: number; }) => {
 		const { item, index } = props
-		let isShow = !!listShowItem?.[item.name]
+		let isShow = !!listShowItem?.[item.name] && !!item.description
+		let isDone = item.isDone
 		return (
 			<ATouch
 				activeOpacity={0.7}
 				onPress={() => handleShowTask(item)}
 				w={fullWidth - 22}
-				bg={Colors.timf3eefb}
+				bg={isDone ? Colors.gray757575 : Colors.timf3eefb}
 				aStyle={[layout.shadow, styles.itemStyle]}>
 				<AView r f1>
 					<AView w={2} h={38} bg={LIST_TAG_TASK[item.tag || 'Low'].color} aStyle={{ marginHorizontal: normalize(6) }} />
 					<AView f1>
 						<AText h16 w500 >{item.name}</AText>
 						<AView r>
-							<AText>{moment(item?.time).format('hh:mm')}</AText>
+							<AText h12>{moment(item?.timeStart).format('hh:mm')} - {moment(item?.timeStart).format('hh:mm')}</AText>
 							<AView p={6} ph={12} bg={LIST_TAG_TASK[item.tag || 'Low'].color} aStyle={styles.labelStyle}>
 								<AText h12 color='white'>{LIST_TAG_TASK[item.tag || 'Low'].title}</AText>
 							</AView>
 						</AView>
 					</AView>
-					<AView p={6} aStyle={{ justifyContent: 'space-between' }}>
-						<AIcon
-							name='edit-square'
-							origin={ICON_TYPE.MATERIAL_ICONS}
-							size={normalize(22)}
-							onPress={() => handleEditTask(item)}
-						/>
-						<AIcon
-							name='close-box-outline'
-							origin={ICON_TYPE.MATERIAL_COMMUNITY}
-							size={normalize(22)}
-							onPress={() => handleDeleteTask(item)}
-						/>
+					<AView>
+						<AView r aStyle={{ justifyContent: 'space-between', marginBottom: normalize(5) }}>
+							<AIcon
+								name='edit-square'
+								origin={ICON_TYPE.MATERIAL_ICONS}
+								size={normalize(22)}
+								onPress={() => handleEditTask(item)}
+							/>
+							<AIcon
+								name='close-box-outline'
+								origin={ICON_TYPE.MATERIAL_COMMUNITY}
+								size={normalize(22)}
+								onPress={() => handleDeleteTask(item)}
+							/>
+						</AView>
+						<ATouch disabled={isDone} onPress={() => handleDoneTask(item)} bg={isDone ? Colors.gray4D4D4D : Colors.success} p={12} pv={4} aStyle={{ borderRadius: normalize(6) }}>
+							<AText h12 color={isDone ? Colors.black : Colors.white}>{isDone ? 'Done' : 'Make done'}</AText>
+						</ATouch>
 					</AView>
 				</AView>
 				{isShow && <AView p={12} h={'auto'}>
-					<AText h16>{'description here escription here escription here escription here description here escription here escription here escription here description here escription here escription here escription here description here escription here escription here escription here '}</AText>
+					<AText h16>{item.description}</AText>
 				</AView>}
 			</ATouch>
 		)
-	}
+	}, [listShowItem])
 
 	return (
 		<SafeScreen>
@@ -222,6 +226,7 @@ function Dashboard({ navigation }: RootScreenProps<'Dashboard'>) {
 					{t('startup:error')}
 				</Text>
 			)}
+            {modalAddTask()}
 		</SafeScreen>
 	);
 }

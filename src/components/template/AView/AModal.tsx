@@ -21,7 +21,7 @@ const AModal = (props: AModalType) => {
                 <Pressable onPress={onClose} style={{ flex: 1, flexGrow: 1, }}>
                     <ImageBackground source={{}} style={styles.modalStyle} />
                 </Pressable>
-                <Animated.View entering={animationTypeIn} exiting={animationTypeOut} style={[styles.contantEdit, layout.shadow]}>
+                <Animated.View  style={[styles.contantEdit, layout.shadow]}>
                     {children}
                 </Animated.View>
             </View>
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     contantEdit: {
         position: 'absolute',
         alignSelf: 'center',
-        top: fullHeight - fullHeight / 2 - scaleHeight(200),
+        top: scaleHeight(90),
         padding: scaleHeight(12),
         paddingHorizontal: scaleWidth(20),
         borderRadius: normalize(20),

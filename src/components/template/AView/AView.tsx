@@ -1,4 +1,4 @@
-import { ColorValue, StyleSheet, Text, View, ViewProps } from 'react-native'
+import { ColorValue, LayoutAnimation, StyleSheet, Text, View, ViewProps } from 'react-native'
 import React from 'react'
 import { AViewType } from './types'
 import { normalize, scaleHeight, scaleWidth } from '@/common'
@@ -12,6 +12,21 @@ const AView = (props: React.JSX.IntrinsicAttributes & React.JSX.IntrinsicClassAt
         f1 = false, f2 = false, r = false, center = false,
         p, ph, pv, pl, pr, pb, pt, aStyle
     } = props
+
+	const toggleAnimation = (duration: number) => {
+		return {
+			duration: duration,
+			update: {
+				property: LayoutAnimation.Properties.scaleXY,
+				type: LayoutAnimation.Types.easeInEaseOut,
+			},
+			delete: {
+				property: LayoutAnimation.Properties.opacity,
+				type: LayoutAnimation.Types.easeInEaseOut,
+			},
+		};
+	};
+	LayoutAnimation.configureNext(toggleAnimation(300))
 
     return (
         <Animated.View

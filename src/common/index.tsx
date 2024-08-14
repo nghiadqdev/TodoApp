@@ -160,7 +160,10 @@ function editTask(oldTask: TaskType, task: TaskType) {
 }
 function deleteTask(task: TaskType) {
   let checkTask = JSON.parse(storage.getString(moment(new Date(task.date)).format('YYYY-MM-DD')) || '[]')
-  checkTask = checkTask.filter((val: { name: string; }) => val.name != task.name)
+  if (checkTask.length > 1)
+    checkTask = checkTask.filter((val: { name: string; }) => val.name != task.name)
+  else
+    checkTask = [{ name: "Empty", index: task.index, date: task.date }]
   storage.set(moment(new Date(task.date)).format('YYYY-MM-DD'), JSON.stringify(checkTask))
   return checkTask
 }
